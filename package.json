@@ -1,17 +1,25 @@
 {
-    "name": "neuralbot",
-    "version": "1.0.0",
-    "description": "neural network bot",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url":
-            "git+https://Arthur_Lazarenko@bitbucket.org/Arthur_Lazarenko/neuralbot.git"
-    },
-    "author": "Arthur Lazarenko",
-    "license": "ISC",
-    "homepage": "https://bitbucket.org/Arthur_Lazarenko/neuralbot#readme"
+  "name": "neuralbot",
+  "version": "1.0.0",
+  "description": "neural network bot",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://Arthur_Lazarenko@bitbucket.org/Arthur_Lazarenko/neuralbot.git"
+  },
+  "author": "Arthur Lazarenko",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/Arthur_Lazarenko/neuralbot#readme",
+  "dependencies": {
+    "brain.js": "^1.1.2"
+  },
+  "devDependencies": {},
+  "keywords": [
+    "neural",
+    "network",
+    "bot"
+  ]
 }
