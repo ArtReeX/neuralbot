@@ -36,7 +36,7 @@ module.exports.initialize = async () => {
 
         return {
             network: neuralNetwork,
-            dictionary: await JSON.parse(
+            dictionary: JSON.parse(
                 await utilities.readFromFile(config.paths.dictionary, true)
             )
         };
@@ -69,17 +69,17 @@ var createDictionary = async () => {
             true
         )).split("\r\n");
 
-        var dictionary = new Map();
+        var dictionary = {};
 
         await dialogs.forEach(async sentense => {
             words = (await utilities.clearText(sentense)).split(" ");
 
             await words.forEach(async word => {
-                dictionary.set(word, (Math.random() * (0 - 1) + 1).toFixed(64));
+                dictionary[word] = (Math.random() * (0 - 1) + 1).toFixed(64);
             });
         });
 
-        await utilities.writeToFile(config.paths.dictionary, dictionary, true);
+        utilities.writeToFile(config.paths.dictionary, dictionary, true);
     } catch (error) {
         console.error("Error creating dictionary. " + Error(error).message);
     }

@@ -10,8 +10,8 @@ module.exports.clearText = async string => {
 
 module.exports.readFromFile = async (path, autoCreate) => {
     try {
-        if (!await fs.existsSync(path) && autoCreate) {
-            await fs.writeFileSync(path, "", null, "utf8");
+        if (!fs.existsSync(path) && autoCreate) {
+            fs.writeFileSync(path, "", null, "utf8");
         }
         return fs.readFileSync(path, "utf8");
     } catch (error) {
@@ -26,14 +26,12 @@ module.exports.readFromFile = async (path, autoCreate) => {
 
 module.exports.writeToFile = async (path, data, overwrite) => {
     try {
-        await fs.writeFileSync(
+        fs.writeFileSync(
             path,
-            await JSON.stringify(data),
+            JSON.stringify(data),
             { flag: overwrite ? "w" : "a" },
             "utf8"
         );
-        console.log(data);
-        console.log(JSON.stringify(data));
     } catch (error) {
         console.error(
             "Could not write to the file [" +
@@ -46,7 +44,7 @@ module.exports.writeToFile = async (path, data, overwrite) => {
 
 module.exports.checkExistenceFile = async path => {
     try {
-        return await fs.existsSync(path);
+        return fs.existsSync(path);
     } catch (error) {
         console.error(
             "Could not determine the existence of the file [" +
@@ -61,7 +59,7 @@ module.exports.stringToCodeArray = async (string, dictionary, size) => {
     try {
         var words = (await this.clearText(string)).split(" ");
 
-        var array = new Array();
+        var array = [];
 
         await words.forEach(async (word, index) => {
             if (index < size) {
