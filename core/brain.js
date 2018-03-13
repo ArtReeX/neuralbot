@@ -20,7 +20,7 @@ const config = {
   },
 
   train: {
-    iterations: 200000,
+    iterations: 100000,
     errorThresh: 0.005,
     log: true,
     logPeriod: 10,
