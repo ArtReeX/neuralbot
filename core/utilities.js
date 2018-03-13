@@ -4,19 +4,19 @@ module.exports.clearText = async string => {
     try {
         return string.trim().replace("[^ a-z A-Z а-я А-Я 0-9 , ! ? .]");
     } catch (error) {
-        console.error("Error: unable to clear text. " + Error(error).message);
+        console.error("Unable to clear text. " + Error(error).message);
     }
 };
 
 module.exports.readFromFile = async (path, autoCreate) => {
     try {
-        if (!fs.existsSync(path) && autoCreate) {
-            fs.writeFileSync(path, "", null, "utf8");
+        if (!await fs.existsSync(path) && autoCreate) {
+            await fs.writeFileSync(path, "", null, "utf8");
         }
         return fs.readFileSync(path, "utf8");
     } catch (error) {
         console.error(
-            "Error: сould not read data from file [" +
+            "Could not read data from file [" +
                 path +
                 "]. " +
                 Error(error).message
@@ -26,10 +26,30 @@ module.exports.readFromFile = async (path, autoCreate) => {
 
 module.exports.writeToFile = async (path, data, overwrite) => {
     try {
-        fs.writeFileSync(path, data, { flag: overwrite ? "w" : "a" }, "utf8");
+        await fs.writeFileSync(
+            path,
+            await JSON.stringify(data),
+            { flag: overwrite ? "w" : "a" },
+            "utf8"
+        );
+        console.log(data);
+        console.log(JSON.stringify(data));
     } catch (error) {
         console.error(
-            "Error: сould not write to the file [" +
+            "Could not write to the file [" +
+                path +
+                "]. " +
+                Error(error).message
+        );
+    }
+};
+
+module.exports.checkExistenceFile = async path => {
+    try {
+        return await fs.existsSync(path);
+    } catch (error) {
+        console.error(
+            "Could not determine the existence of the file [" +
                 path +
                 "]. " +
                 Error(error).message
@@ -43,7 +63,7 @@ module.exports.stringToCodeArray = async (string, dictionary, size) => {
 
         var array = new Array();
 
-        words.forEach(async (word, index) => {
+        await words.forEach(async (word, index) => {
             if (index < size) {
                 array.push(dictionary.get(word));
             }
@@ -56,7 +76,7 @@ module.exports.stringToCodeArray = async (string, dictionary, size) => {
         return array;
     } catch (error) {
         console.error(
-            "Error: could not convert string to array of codes. " +
+            "Could not convert string to array of codes. " +
                 Error(error).message
         );
     }
@@ -66,8 +86,8 @@ module.exports.codeArrayToString = async (array, dictionary) => {
     try {
         let string = "";
 
-        array.forEach(async code => {
-            dictionary.forEach(async (key, word) => {
+        await array.forEach(async code => {
+            await dictionary.forEach(async (key, word) => {
                 if (key == code) {
                     string += word + " ";
                 }
@@ -77,7 +97,7 @@ module.exports.codeArrayToString = async (array, dictionary) => {
         return await this.clearText(string);
     } catch (error) {
         console.error(
-            "Error: could not convert array of codes to string. " +
+            "Could not convert array of codes to string. " +
                 Error(error).message
         );
     }

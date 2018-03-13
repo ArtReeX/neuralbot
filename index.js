@@ -1,8 +1,10 @@
-let utilities = require("./core/utilities");
+let brain = require("./core/brain");
 
 (async () => {
     try {
+        var neuralNetwork = await brain.initialize();
+        //await brain.completion(neuralNetwork.network);
     } catch (error) {
-        console.log(error.message);
+        console.error("Error starting neural network. " + Error(error).message);
     }
 })();
