@@ -38,8 +38,6 @@ module.exports.initialize = async () => {
                 )
             );
         } else {
-            console.log("Beginning of neural network training.");
-
             await neuralNetwork.train(
                 await createPatternsForTrains(),
                 config.train
@@ -92,6 +90,16 @@ var createPatternsForTrains = async () => {
             )).split("\r\n"),
             countDialogs = 0,
             patterns = [];
+
+        for (count = 0; count < dialogs.length; count++) {
+            if (
+                !dialogs[count]
+                    .trim()
+                    .replace("[^ a-z A-Z а-я А-Я 0-9 , ! ? .]")
+            ) {
+                dialogs.splice(count, 1);
+            }
+        }
 
         for (
             countPatterns = 0;

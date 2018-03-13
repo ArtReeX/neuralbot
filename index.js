@@ -11,7 +11,9 @@ const readline = require("readline"),
         });
 
         reader.on("line", async question => {
-            console.log(await brain.activate(question, neuralNetwork));
+            if (question) {
+                console.log(await brain.activate(question, neuralNetwork));
+            }
         });
 
         await brain.completion(neuralNetwork);
