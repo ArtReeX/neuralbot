@@ -79,32 +79,8 @@ var createDictionary = async () => {
             });
         });
 
-        utilities.writeToFile(config.paths.dictionary, dictionary, true);
+        await utilities.writeToFile(config.paths.dictionary, dictionary, true);
     } catch (error) {
         console.error("Error creating dictionary. " + Error(error).message);
     }
-
-    /*// считывание начальных диалогов
-	dialogsByte := ReadFromFile(InitialDialogsFile, true)
-
-	// подготовка местя для хранения словаря
-	dictionaryMap := make(map[string]float64)
-
-	// инициализация случайных чисел
-	rand.Seed(time.Now().UnixNano())
-
-	// разделение текста по предложениям
-	dialogsSentences := strings.Split(string(dialogsByte), "\r\n")
-
-	// разделение предложений на слова
-	for _, word := range dialogsSentences {
-
-		for _, word := range strings.Split(ClearText(word), " ") {
-			dictionaryMap[ClearText(word)] = rand.Float64()
-		}
-
-	}
-
-	// запись словаря в файл
-	WriteToFile(DictionaryFile, Encode(dictionaryMap), true, true)*/
 };
