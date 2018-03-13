@@ -14,9 +14,15 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/Arthur_Lazarenko/neuralbot#readme",
   "dependencies": {
-    "brain.js": "^1.1.2"
+    "brain.js": "^1.1.2",
+    "log4js": "^2.5.3"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-plugin-import": "^2.9.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.7.0"
+  },
   "keywords": [
     "neural",
     "network",
