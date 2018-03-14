@@ -56,7 +56,7 @@ module.exports.arrayToString = async (array) => {
     for (let count = 0; count < array.length; count += 1) {
       string += array[count].replace('^', ' ');
     }
-    console.log(await this.clearText(string));
+
     return await this.clearText(string);
   } catch (error) {
     throw new Error(`Could not convert array of codes to string. ${error.message}`);

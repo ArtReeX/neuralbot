@@ -1,6 +1,8 @@
 const readline = require('readline');
-const logger = require('log4js').getLogger();
+const log = require('log4js').getLogger();
 const brain = require('./core/brain');
+
+log.level = 'trace';
 
 (async () => {
   try {
@@ -13,12 +15,12 @@ const brain = require('./core/brain');
 
     reader.on('line', async (question) => {
       if (question) {
-        logger.log(await brain.activate(question, neuralNetwork));
+        log.info(await brain.activate(question, neuralNetwork));
       }
     });
 
     await brain.completion(neuralNetwork);
   } catch (error) {
-    logger.error(`Error starting neural network. ${error.message}`);
+    log.error(`Error starting neural network. ${error.message}`);
   }
 })();
