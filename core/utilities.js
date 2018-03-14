@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-module.exports.clearText = async (string) => {
+module.exports.clearText = (string) => {
   try {
     return string.trim().replace('[^ a-z A-Z а-я А-Я 0-9 , ! ? .]');
   } catch (error) {
@@ -8,7 +8,7 @@ module.exports.clearText = async (string) => {
   }
 };
 
-module.exports.readFromFile = async (path, autoCreate) => {
+module.exports.readFromFile = (path, autoCreate) => {
   try {
     if (!fs.existsSync(path) && autoCreate) {
       fs.writeFileSync(path, '', null, 'utf8');
@@ -19,7 +19,7 @@ module.exports.readFromFile = async (path, autoCreate) => {
   }
 };
 
-module.exports.writeToFile = async (path, data, overwrite) => {
+module.exports.writeToFile = (path, data, overwrite) => {
   try {
     fs.writeFileSync(path, data, { flag: overwrite ? 'w' : 'a' }, 'utf8');
   } catch (error) {
@@ -27,7 +27,7 @@ module.exports.writeToFile = async (path, data, overwrite) => {
   }
 };
 
-module.exports.checkExistenceFile = async (path) => {
+module.exports.checkExistenceFile = (path) => {
   try {
     return fs.existsSync(path);
   } catch (error) {
@@ -35,9 +35,9 @@ module.exports.checkExistenceFile = async (path) => {
   }
 };
 
-module.exports.stringToArray = async (string) => {
+module.exports.stringToArray = (string) => {
   try {
-    const words = (await this.clearText(string)).split(' ');
+    const words = this.clearText(string).split(' ');
 
     for (let count = 0; count < words.length; count += 1) {
       words[count] += '^';
@@ -49,7 +49,7 @@ module.exports.stringToArray = async (string) => {
   }
 };
 
-module.exports.arrayToString = async (array) => {
+module.exports.arrayToString = (array) => {
   try {
     let string = '';
 
@@ -57,7 +57,7 @@ module.exports.arrayToString = async (array) => {
       string += array[count].replace('^', ' ');
     }
 
-    return await this.clearText(string);
+    return this.clearText(string);
   } catch (error) {
     throw new Error(`Could not convert array of codes to string. ${error.message}`);
   }

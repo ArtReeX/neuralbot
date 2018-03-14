@@ -31,47 +31,23 @@ const config = {
 };
 
 
-const createPatternsForTrains = async () => {
+const createPatternsForTrains = () => {
   try {
-    const dialogs = (await utilities.readFromFile(config.paths.dialogs, true)).split('\r\n');
-
-    // создание диалогов без пустых строк
-    let dialogOnlyContent = [];
-
-    for (let count = 0; count < dialogs.length; count += 1) {
-      dialogOnlyContent.push(utilities.clearText(dialogs[count]));
-    }
-
-    dialogOnlyContent = await Promise.all(dialogOnlyContent);
-
-    // создание диалогов с чистыми строками
-    let dialogCleaned = [];
+    const dialogs = utilities.readFromFile(config.paths.dialogs, true).split('\r\n');
+    const patterns = [];
+    const dialogsContent = [];
+    let countDialogs = 0;
 
     for (let count = 0; count < dialogs.length; count += 1) {
-      if (dialogs[count]) {
-        dialogCleaned.push(dialogs[count]);
+      if (utilities.clearText(dialogs[count])) {
+        dialogsContent.push(utilities.clearText(dialogs[count]));
       }
     }
 
-    dialogCleaned = await Promise.all(dialogCleaned);
-
-    // создание диалогов состоящих с массива слов
-    const patterns = [];
-    let countDialogs = 0;
-
-    let dialogsArray = [];
-
-    for (let count = 0; count < dialogCleaned.length; count += 1) {
-      dialogsArray.push(utilities.stringToArray(dialogCleaned[count]));
-    }
-
-    dialogsArray = await Promise.all(dialogsArray);
-
-    // создание шаблона с диалогами
-    for (let countPatterns = 0; countPatterns < dialogsArray.length / 2; countPatterns += 1) {
+    for (let count = 0; count < dialogsContent.length / 2; count += 1) {
       patterns.push({
-        input: dialogsArray[countDialogs],
-        output: dialogsArray[countDialogs + 1],
+        input: utilities.stringToArray(dialogsContent[countDialogs]),
+        output: utilities.stringToArray(dialogsContent[countDialogs + 1]),
       });
 
       countDialogs += 2;
@@ -83,17 +59,17 @@ const createPatternsForTrains = async () => {
   }
 };
 
-module.exports.initialize = async () => {
+module.exports.initialize = () => {
   try {
     const neuralNetwork = new brain.recurrent.LSTM(config.network.activation);
 
-    if (await utilities.checkExistenceFile(config.paths.snapshot)) {
-      const snapshot = await utilities.readFromFile(config.paths.snapshot, false);
+    if (utilities.checkExistenceFile(config.paths.snapshot)) {
+      const snapshot = utilities.readFromFile(config.paths.snapshot, false);
       neuralNetwork.fromJSON(JSON.parse(snapshot));
     } else {
       log.info('The training of the neural network was started.');
 
-      await neuralNetwork.train(await createPatternsForTrains(), config.train);
+      neuralNetwork.train(createPatternsForTrains(), config.train);
 
       log.info('The neural network training has been completed.');
     }
@@ -104,18 +80,18 @@ module.exports.initialize = async () => {
   }
 };
 
-module.exports.completion = async (neuralNetwork) => {
+module.exports.completion = (neuralNetwork) => {
   try {
     const snapshot = JSON.stringify(neuralNetwork.toJSON());
-    await utilities.writeToFile(config.paths.snapshot, snapshot, true);
+    utilities.writeToFile(config.paths.snapshot, snapshot, true);
   } catch (error) {
     throw new Error(`Error of the neural network session termination. ${error.message}`);
   }
 };
 
-module.exports.activate = async (string, neuralNetwork) => {
+module.exports.activate = (string, neuralNetwork) => {
   try {
-    return await utilities.arrayToString(neuralNetwork.run(await utilities.stringToArray(string)));
+    return utilities.arrayToString(neuralNetwork.run(utilities.stringToArray(string)));
   } catch (error) {
     throw new Error(`It is impossible to activate the neural network. ${error.message}`);
   }

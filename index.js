@@ -4,9 +4,9 @@ const brain = require('./core/brain');
 
 log.level = 'trace';
 
-(async () => {
+(() => {
   try {
-    const neuralNetwork = await brain.initialize();
+    const neuralNetwork = brain.initialize();
 
     const reader = readline.createInterface({
       input: process.stdin,
@@ -15,11 +15,11 @@ log.level = 'trace';
 
     reader.on('line', async (question) => {
       if (question) {
-        log.info(await brain.activate(question, neuralNetwork));
+        log.info(brain.activate(question, neuralNetwork));
       }
     });
 
-    await brain.completion(neuralNetwork);
+    brain.completion(neuralNetwork);
   } catch (error) {
     log.error(`Error starting neural network. ${error.message}`);
   }
