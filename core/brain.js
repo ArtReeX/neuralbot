@@ -18,7 +18,7 @@ const config = {
   network: {},
 
   train: {
-    iterations: 100,
+    iterations: 1000,
     errorThresh: 0.005,
     log: true,
     logPeriod: 10,
