@@ -2,6 +2,8 @@ const brain = require('brain.js');
 const log = require('log4js').getLogger();
 const utilities = require('./utilities.js');
 
+log.level = 'trace';
+
 const config = {
   paths: {
     snapshot: 'neuralnetwork.snapshot',
@@ -36,21 +38,21 @@ const createPatternsForTrains = async () => {
     const patterns = [];
 
     for (let count = 0; count < dialogs.length; count += 1) {
-      if (!dialogs[count].trim().replace('[^ a-z A-Z а-я А-Я 0-9 , ! ? .]')) {
+      if (await utilities.clearText(dialogs[count])) {
         dialogs.splice(count, 1);
       }
     }
 
     for (let countPatterns = 0; countPatterns < dialogs.length / 2; countPatterns += 1) {
       patterns.push({
-        input: utilities.stringToArray(utilities.clearText(dialogs[countDialogs])),
-        output: utilities.stringToArray(utilities.clearText(dialogs[countDialogs + 1])),
+        input: await utilities.stringToArray(await utilities.clearText(dialogs[countDialogs])),
+        output: await utilities.stringToArray(await utilities.clearText(dialogs[countDialogs + 1])),
       });
 
       countDialogs += 2;
     }
 
-    return Promise.all(patterns);
+    return patterns;
   } catch (error) {
     throw new Error(`Could not create template for training. ${error.message}`);
   }
