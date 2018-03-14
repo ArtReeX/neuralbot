@@ -34,19 +34,44 @@ const config = {
 const createPatternsForTrains = async () => {
   try {
     const dialogs = (await utilities.readFromFile(config.paths.dialogs, true)).split('\r\n');
-    let countDialogs = 0;
-    const patterns = [];
+
+    // создание диалогов без пустых строк
+    let dialogOnlyContent = [];
 
     for (let count = 0; count < dialogs.length; count += 1) {
-      if (await utilities.clearText(dialogs[count])) {
-        dialogs.splice(count, 1);
+      dialogOnlyContent.push(utilities.clearText(dialogs[count]));
+    }
+
+    dialogOnlyContent = await Promise.all(dialogOnlyContent);
+
+    // создание диалогов с чистыми строками
+    let dialogCleaned = [];
+
+    for (let count = 0; count < dialogs.length; count += 1) {
+      if (dialogs[count]) {
+        dialogCleaned.push(dialogs[count]);
       }
     }
 
-    for (let countPatterns = 0; countPatterns < dialogs.length / 2; countPatterns += 1) {
+    dialogCleaned = await Promise.all(dialogCleaned);
+
+    // создание диалогов состоящих с массива слов
+    const patterns = [];
+    let countDialogs = 0;
+
+    let dialogsArray = [];
+
+    for (let count = 0; count < dialogCleaned.length; count += 1) {
+      dialogsArray.push(utilities.stringToArray(dialogCleaned[count]));
+    }
+
+    dialogsArray = await Promise.all(dialogsArray);
+
+    // создание шаблона с диалогами
+    for (let countPatterns = 0; countPatterns < dialogsArray.length / 2; countPatterns += 1) {
       patterns.push({
-        input: await utilities.stringToArray(await utilities.clearText(dialogs[countDialogs])),
-        output: await utilities.stringToArray(await utilities.clearText(dialogs[countDialogs + 1])),
+        input: dialogsArray[countDialogs],
+        output: dialogsArray[countDialogs + 1],
       });
 
       countDialogs += 2;
