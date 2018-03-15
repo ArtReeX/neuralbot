@@ -18,10 +18,10 @@ const config = {
   network: {},
 
   train: {
-    iterations: 1000,
+    iterations: 50,
     errorThresh: 0.005,
     log: true,
-    logPeriod: 10,
+    logPeriod: 5,
     learningRate: 0.3,
     momentum: 0.1,
     callback: null,
@@ -31,9 +31,10 @@ const config = {
 };
 
 
-const createPatternsForTrains = () => {
+const createPatternsForTrains = (dialogs) => {
   try {
-    const dialogs = utilities.readFromFile(config.paths.dialogs, true).split('\r\n');
+    log.debug('The creation of a training template was started.');
+
     const patterns = [];
     const dialogsContent = [];
     let countDialogs = 0;
@@ -53,6 +54,8 @@ const createPatternsForTrains = () => {
       countDialogs += 2;
     }
 
+    log.debug('Finally create a training template.');
+
     return patterns;
   } catch (error) {
     throw new Error(`Could not create template for training. ${error.message}`);
@@ -61,7 +64,7 @@ const createPatternsForTrains = () => {
 
 module.exports.initialize = () => {
   try {
-    const neuralNetwork = new brain.recurrent.LSTM(config.network.activation);
+    const neuralNetwork = new brain.recurrent.LSTM(config.network);
 
     if (utilities.checkExistenceFile(config.paths.snapshot)) {
       const snapshot = utilities.readFromFile(config.paths.snapshot, false);
@@ -69,7 +72,7 @@ module.exports.initialize = () => {
     } else {
       log.info('The training of the neural network was started.');
 
-      neuralNetwork.train(createPatternsForTrains(), config.train);
+      neuralNetwork.train(createPatternsForTrains(utilities.readFromFile(config.paths.dialogs, true).split('\r\n')), config.train);
 
       log.info('The neural network training has been completed.');
     }
