@@ -57,7 +57,7 @@ module.exports.arrayToString = (array) => {
       string += array[count];
     }
 
-    return this.clearText(string.replace(/\^/g, ' '), ' ').replace(/start-output/g, '').replace(/stop-input/g, '');
+    return this.clearText(string.replace(/\^/g, ' ').replace(/start-output/g, '').replace(/stop-input/g, ''));
   } catch (error) {
     throw new Error(`Could not convert array of codes to string. ${error.message}`);
   }

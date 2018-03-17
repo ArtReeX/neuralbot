@@ -96,6 +96,7 @@ module.exports.activate = (string, neuralNetwork) => {
   try {
     return utilities.arrayToString(neuralNetwork.run(utilities.stringToArray(string)));
   } catch (error) {
-    throw new Error(`It is impossible to activate the neural network. ${error.message}`);
+    return 'Простите, к сожалению я пока не знаю как ответить на этот вопрос. Но со временем обязательно научусь.';
+    // throw new Error(`It is impossible to activate the neural network. ${error.message}`);
   }
 };
