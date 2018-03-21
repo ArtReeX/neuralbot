@@ -2,7 +2,7 @@ const fs = require('fs');
 
 module.exports.clearText = (string) => {
   try {
-    return string.trim().replace('[^ a-z A-Z а-я А-Я 0-9 , ! ? .]', '');
+    return string.trim().replace('[^ ~ a-z A-Z а-я А-Я 0-9 , ! ? .]', '');
   } catch (error) {
     throw new Error(`Unable to clear text. ${error.message}`);
   }
@@ -37,13 +37,10 @@ module.exports.checkExistenceFile = (path) => {
 
 module.exports.stringToArray = (string) => {
   try {
-    const words = this.clearText(string).split(' ');
+    const answer = this.clearText(string).replace(/ /g, '~ ').split(' ');
+    answer[answer.length - 1] += '~';
 
-    for (let count = 0; count < words.length; count += 1) {
-      words[count] += '^';
-    }
-
-    return words;
+    return answer;
   } catch (error) {
     throw new Error(`Could not convert string to array of codes. ${error.message}`);
   }
@@ -57,7 +54,7 @@ module.exports.arrayToString = (array) => {
       string += array[count];
     }
 
-    return this.clearText(string.replace(/\^/g, ' ').replace(/stop-input|start-output/g, ''));
+    return this.clearText(string.replace(/~/g, ' ').replace(/stop-input|start-output/g, ''));
   } catch (error) {
     throw new Error(`Could not convert array of codes to string. ${error.message}`);
   }

@@ -17,7 +17,7 @@ const config = {
 
   network: {},
 
-  train: {
+  initialization_training: {
     iterations: 50,
     errorThresh: 0.005,
     log: true,
@@ -72,7 +72,7 @@ module.exports.initialize = () => {
     } else {
       log.info('The training of the neural network was started.');
 
-      neuralNetwork.train(createPatternsForTrains(utilities.readFromFile(config.paths.dialogs, true).split('\r\n')), config.train);
+      neuralNetwork.train(createPatternsForTrains(utilities.readFromFile(config.paths.dialogs, true).split('\r\n')), config.initialization_training);
 
       log.info('The neural network training has been completed.');
     }
