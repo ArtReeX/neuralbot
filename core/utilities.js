@@ -2,7 +2,7 @@ const fs = require('fs');
 
 module.exports.clearText = (string) => {
   try {
-    return string.trim().replace('[^ ~ a-z A-Z а-я А-Я 0-9 , ! ? .]', '');
+    return string.trim().replace(/[^ a-z A-Z а-я А-Я 0-9]/g, '').toUpperCase();
   } catch (error) {
     throw new Error(`Unable to clear text. ${error.message}`);
   }
