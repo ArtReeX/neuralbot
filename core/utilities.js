@@ -59,3 +59,16 @@ module.exports.arrayToString = (array) => {
     throw new Error(`Could not convert array of codes to string. ${error.message}`);
   }
 };
+
+module.exports.removeUnknownWords = (array, dictionary) => {
+  try {
+    for (let count = 0; count < array.length; count += 1) {
+      if (dictionary.indexOf(array[count]) === -1) {
+        array.splice(count, 1);
+      }
+    }
+    return array;
+  } catch (error) {
+    throw new Error(`Failed to clear the array by unknown words. ${error.message}`);
+  }
+};
