@@ -31,7 +31,7 @@ const config = {
 };
 
 
-const createPatternsForTrains = (dialogs) => {
+module.exports.createPatternsForTrains = (dialogs) => {
   try {
     log.debug('The creation of a training template was started.');
 
@@ -72,7 +72,7 @@ module.exports.initialize = () => {
     } else {
       log.info('The training of the neural network was started.');
 
-      neuralNetwork.train(createPatternsForTrains(utilities.readFromFile(config.paths.dialogs, true).split('\r\n')), config.initialization_training);
+      neuralNetwork.train(this.createPatternsForTrains(utilities.readFromFile(config.paths.dialogs, true).split('\r\n')), config.initialization_training);
 
       log.info('The neural network training has been completed.');
     }
