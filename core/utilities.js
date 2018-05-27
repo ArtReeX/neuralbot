@@ -1,13 +1,26 @@
 const fs = require('fs');
 
-module.exports.clearText = (string) => {
+// функция очистки текста от спецсимволов
+module.exports.clearString = (string) => {
   try {
-    return string.trim().replace(/[^ a-z A-Z а-я А-Я 0-9]/g, '').toUpperCase();
+    let cleanedString = '';
+
+    // пошаговое очищение строки
+
+    // очистка всех символов кроме разрешённых
+    cleanedString = string.replace(/[^a-z A-Z а-я А-Я 0-9]/g, '');
+    // очистка нескольких спецсимволов подрят
+    cleanedString = cleanedString.replace(/\s+/g, ' ');
+    // очистка пробелов по краям
+    cleanedString = cleanedString.trim();
+
+    return cleanedString;
   } catch (error) {
-    throw new Error(`Unable to clear text. ${error.message}`);
+    throw new Error(`Unable to clear text string. ${error.message}`);
   }
 };
 
+// функция чтения с файла
 module.exports.readFromFile = (path, autoCreate) => {
   try {
     if (!fs.existsSync(path) && autoCreate) {
@@ -19,6 +32,7 @@ module.exports.readFromFile = (path, autoCreate) => {
   }
 };
 
+// функция записи в файл
 module.exports.writeToFile = (path, data, overwrite) => {
   try {
     fs.writeFileSync(path, data, { flag: overwrite ? 'w' : 'a' }, 'utf8');
@@ -27,48 +41,11 @@ module.exports.writeToFile = (path, data, overwrite) => {
   }
 };
 
+// функция проверки существования файла
 module.exports.checkExistenceFile = (path) => {
   try {
     return fs.existsSync(path);
   } catch (error) {
     throw new Error(`Could not determine the existence of the file [${path}]. ${error.message}`);
-  }
-};
-
-module.exports.stringToArray = (string) => {
-  try {
-    const answer = this.clearText(string).replace(/ /g, '~ ').split(' ');
-    answer[answer.length - 1] += '~';
-
-    return answer;
-  } catch (error) {
-    throw new Error(`Could not convert string to array of codes. ${error.message}`);
-  }
-};
-
-module.exports.arrayToString = (array) => {
-  try {
-    let string = '';
-
-    for (let count = 0; count < array.length; count += 1) {
-      string += array[count];
-    }
-
-    return this.clearText(string.replace(/~/g, ' ').replace(/stop-input|start-output/g, ''));
-  } catch (error) {
-    throw new Error(`Could not convert array of codes to string. ${error.message}`);
-  }
-};
-
-module.exports.removeUnknownWords = (array, dictionary) => {
-  try {
-    for (let count = 0; count < array.length; count += 1) {
-      if (dictionary.indexOf(array[count]) === -1) {
-        array.splice(count, 1);
-      }
-    }
-    return array;
-  } catch (error) {
-    throw new Error(`Failed to clear the array by unknown words. ${error.message}`);
   }
 };
