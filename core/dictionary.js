@@ -4,7 +4,7 @@ const utilitiesModule = require('./utilities.js');
 const textToString = text => text.split('\r\n');
 
 // функция генерации уникального идентификатора
-const createIdentificator = (min, max) => (Math.random() * (max - min)) + min;
+const createIdentificator = (min, max) => ((Math.random() * (max - min)) + min).toFixed(32);
 
 // функция проверки слова внутри словаря по идентификатору
 module.exports.checkExistByWord = (word, dictionary) => {
@@ -83,5 +83,37 @@ module.exports.createDiactionary = (text) => {
     return dictionary;
   } catch (error) {
     throw new Error(`Error creating dictionary. ${error.message}`);
+  }
+};
+
+// функция сохранения словаря
+module.exports.save = (path, dictionary) => {
+  try {
+    // запись образа словаря в файл
+    utilitiesModule.writeToFile(path, JSON.stringify(dictionary), true);
+  } catch (error) {
+    throw new Error(`Failed to saving dictionary. ${error.message}`);
+  }
+};
+
+// функция инициализации словаря
+module.exports.initialize = (pathDictionary, pathDialogs) => {
+  try {
+    // проверка существования необходимых образов
+    if (utilitiesModule.checkExistenceFile(pathDictionary)) {
+      // считывание словаря с файла
+      return JSON.parse(utilitiesModule.readFromFile(pathDictionary, false));
+    }
+
+    // считывание диалогов
+    const dialogs = utilitiesModule.readFromFile(pathDialogs, false);
+    // создание словаря
+    const dictionary = this.createDiactionary(dialogs);
+    // запись образа словаря в файл
+    this.save(pathDictionary, dictionary);
+
+    return dictionary;
+  } catch (error) {
+    throw new Error(`Failed to initialize dictionary. ${error.message}`);
   }
 };

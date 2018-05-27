@@ -11,38 +11,6 @@ logModule.level = 'trace';
 let DICTIONARY;
 let NETWORK;
 
-// функция сохранения словаря
-const saveDictionary = (path, dictionary) => {
-  try {
-    // запись образа словаря в файл
-    utilitiesModule.writeToFile(path, JSON.stringify(dictionary), true);
-  } catch (error) {
-    throw new Error(`Failed to saving dictionary. ${error.message}`);
-  }
-};
-
-// функция инициализации словаря
-const initializeDictionary = (pathDictionary, pathDialogs) => {
-  try {
-    // проверка существования необходимых образов
-    if (utilitiesModule.checkExistenceFile(pathDictionary)) {
-      // считывание словаря с файла
-      return JSON.parse(utilitiesModule.readFromFile(pathDictionary, false));
-    }
-
-    // считывание диалогов
-    const dialogs = utilitiesModule.readFromFile(pathDialogs, false);
-    // создание словаря
-    const dictionary = dictionaryModule.createDiactionary(dialogs);
-    // запись образа словаря в файл
-    saveDictionary(pathDictionary, dictionary);
-
-    return dictionary;
-  } catch (error) {
-    throw new Error(`Failed to initialize dictionary. ${error.message}`);
-  }
-};
-
 // функция сохранения нейронной сети
 const saveNetwork = (path, network) => {
   try {
@@ -53,6 +21,7 @@ const saveNetwork = (path, network) => {
   }
 };
 
+/*
 // функция создания примеров для обучения
 const createPatternsForTrains = (dialogs, dictionary) => {
   try {
@@ -61,7 +30,7 @@ const createPatternsForTrains = (dialogs, dictionary) => {
     const patterns = [];
     const dialogsContent = [];
     const countDialogs = 0;
-    /*
+
     for (let count = 0; count < dialogs.length; count += 1) {
       if (utilities.clearText(dialogs[count])) {
         dialogsContent.push(utilities.clearText(dialogs[count]));
@@ -76,14 +45,14 @@ const createPatternsForTrains = (dialogs, dictionary) => {
 
       countDialogs += 2;
     }
-    */
+
     logModule.debug('Finally create a training template.');
 
     return patterns;
   } catch (error) {
     throw new Error(`Could not create template for training. ${error.message}`);
   }
-};
+}; */
 
 // функция обучения нейронной сети
 const trainNeuralNetwork = (network, dialogs, dictionary, config) => {
@@ -135,7 +104,9 @@ const initializeNetwork = (pathNetwork, pathDialogs, dictionary, configTraining)
 module.exports.initialize = () => {
   try {
     // инициализация словаря
-    DICTIONARY = initializeDictionary(configModule.dictionary.path, configModule.dialogs.path);
+    const dictionaryPath = configModule.dictionary.path;
+    const dialogsPath = configModule.dialogs.path;
+    DICTIONARY = dictionaryModule.initialize(dictionaryPath, dialogsPath);
     // инициализация нейронной сети
     const configN = configModule.network;
     const configD = configModule.dialogs;
@@ -149,7 +120,7 @@ module.exports.initialize = () => {
 module.exports.completion = () => {
   try {
     // сохранение словаря
-    saveDictionary(configModule.dictionary.path, DICTIONARY);
+    dictionaryModule.save(configModule.dictionary.path, DICTIONARY);
     // сохранение нейронной сети
     saveNetwork(configModule.network.path, NETWORK);
   } catch (error) {
