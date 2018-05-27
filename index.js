@@ -1,30 +1,30 @@
 // подключение необходимых модулей
-const readline = require('readline');
-const log = require('log4js').getLogger();
-const brain = require('./core/brain.js');
+const readlineModule = require('readline');
+const logModule = require('log4js').getLogger();
+const brainModule = require('./core/brain.js');
 
-log.level = 'trace';
+logModule.level = 'trace';
 
 (() => {
   try {
-    // инициализация нейронной сети
-    const neuralNetwork = brain.initialize();
+    // инициализация программы
+    brainModule.initialize();
 
     // создание интерфейса командной строки
-    const reader = readline.createInterface({
+    const reader = readlineModule.createInterface({
       input: process.stdin,
       output: process.stdout,
     });
 
     reader.on('line', async (question) => {
       if (question) {
-        log.info(brain.activate(question, neuralNetwork));
+        logModule.info(brainModule.activate(question));
       }
     });
 
-    // завершение работы нейронной сети
-    brain.completion(neuralNetwork);
+    // завершение работы программы
+    brainModule.completion();
   } catch (error) {
-    log.error(`Error starting neural network. ${error.message}`);
+    logModule.error(`Error starting neural network. ${error.message}`);
   }
 })();

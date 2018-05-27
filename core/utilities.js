@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fsModule = require('fs');
 
 // функция очистки текста от спецсимволов
 module.exports.clearString = (string) => {
@@ -13,6 +13,8 @@ module.exports.clearString = (string) => {
     cleanedString = cleanedString.replace(/\s+/g, ' ');
     // очистка пробелов по краям
     cleanedString = cleanedString.trim();
+    // преобразование в высокий текст
+    cleanedString = cleanedString.toUpperCase();
 
     return cleanedString;
   } catch (error) {
@@ -23,10 +25,10 @@ module.exports.clearString = (string) => {
 // функция чтения с файла
 module.exports.readFromFile = (path, autoCreate) => {
   try {
-    if (!fs.existsSync(path) && autoCreate) {
-      fs.writeFileSync(path, '', null, 'utf8');
+    if (!fsModule.existsSync(path) && autoCreate) {
+      fsModule.writeFileSync(path, '', null, 'utf8');
     }
-    return fs.readFileSync(path, 'utf8');
+    return fsModule.readFileSync(path, 'utf8');
   } catch (error) {
     throw new Error(`Could not read data from file [${path}]. ${error.message}`);
   }
@@ -35,7 +37,7 @@ module.exports.readFromFile = (path, autoCreate) => {
 // функция записи в файл
 module.exports.writeToFile = (path, data, overwrite) => {
   try {
-    fs.writeFileSync(path, data, { flag: overwrite ? 'w' : 'a' }, 'utf8');
+    fsModule.writeFileSync(path, data, { flag: overwrite ? 'w' : 'a' }, 'utf8');
   } catch (error) {
     throw new Error(`Could not write to the file [${path}]. ${error.message}`);
   }
@@ -44,7 +46,7 @@ module.exports.writeToFile = (path, data, overwrite) => {
 // функция проверки существования файла
 module.exports.checkExistenceFile = (path) => {
   try {
-    return fs.existsSync(path);
+    return fsModule.existsSync(path);
   } catch (error) {
     throw new Error(`Could not determine the existence of the file [${path}]. ${error.message}`);
   }
