@@ -14,7 +14,7 @@ module.exports.network = {
 
   // параметры обучения
   training: {
-    iterations: 50,
+    iterations: 20000,
     errorThresh: 0.005,
     log: true,
     logPeriod: 5,

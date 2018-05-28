@@ -1,8 +1,5 @@
 const utilitiesModule = require('./utilities.js');
 
-// функция разделения текста на реплики
-const textToString = text => text.split('\r\n');
-
 // функция генерации уникального идентификатора
 const createIdentificator = (min, max) => ((Math.random() * (max - min)) + min).toFixed(32);
 
@@ -56,14 +53,14 @@ module.exports.createDiactionary = (text) => {
     const dictionary = {};
 
     // разделение диалога на реплики
-    const dialog = textToString(text);
+    const dialog = utilitiesModule.convertTextToReplicas(text);
 
     // разделение реплик на уникальные слова
     for (let count = 0; count < dialog.length; count += 1) {
       // очистка текста
       dialog[count] = utilitiesModule.clearString(dialog[count]);
       // разделение реплики на слова
-      dialog[count] = dialog[count].split(' ');
+      dialog[count] = utilitiesModule.splitStringIntoWords(dialog[count]);
     }
 
     // заполнение хранилища уникальными словами
